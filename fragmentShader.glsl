@@ -114,8 +114,10 @@ void main(void)
     //     )
     // );
 
-    float xDistortion = rerange(sin(iGlobalTime/500.0), -1.0, 1.0, 4.0, 5.0);
-    float yDistortion = rerange(sin(iGlobalTime+10.0/450.0), -1.0, 1.0, 3.0, 4.0);
+    // float xDistortion = rerange(sin(iGlobalTime/500.0), -1.0, 1.0, 4.0, 10.0);
+    // float yDistortion = rerange(sin(iGlobalTime+10.0/450.0), -1.0, 1.0, 7.0, 12.0);
+    float xDistortion = iGlobalTime;
+    float yDistortion = (iGlobalTime)+500.0;
 
     gl_FragColor = _3to4(
         blendScreen(
@@ -125,9 +127,9 @@ void main(void)
                         iChannel0,
                         vec2(
                             // rerange(texCoord.x, 0.0, iWidth, 0.0, 10.0),
-                            rerange(texCoord.x, 0.0, iWidth, 0.0, xDistortion),
+                            rerange(texCoord.x+xDistortion, 0.0, iWidth, 0.0, 10.0),
                             // rerange(texCoord.y, 0.0, iWidth, 0.0, 10.0)
-                            rerange(texCoord.y, 0.0, iWidth, 0.0, yDistortion)
+                            rerange(texCoord.y+yDistortion, 0.0, iWidth, 0.0, 10.0)
                         )
                     )
                 ),
@@ -138,9 +140,9 @@ void main(void)
                     iChannel1,
                     vec2(
                         // rerange(texCoord.x, 0.0, iWidth, 0.0, 10.0),
-                        rerange(texCoord.x, 0.0, iWidth, 0.0, 5.0),
+                        rerange(texCoord.x, 0.0, iWidth, 0.0, 20.0),
                         // rerange(texCoord.y, 0.0, iWidth, 0.0, 10.0)
-                        rerange(texCoord.y, 0.0, iWidth, 0.0, 5.0)
+                        rerange(texCoord.y, 0.0, iWidth, 0.0, 20.0)
                     )
                 )
             )

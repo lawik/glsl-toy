@@ -17,9 +17,9 @@ function run (vertexShader, fragmentShader) {
     var width = window.innerWidth;
     var height = window.innerHeight;
 
-    var geometry = new THREE.BoxGeometry( window.innerWidth, window.innerHeight, 32 );
+    // var geometry = new THREE.BoxGeometry( window.innerWidth, window.innerHeight, 32 );
 
-    // var geometry = new THREE.SphereGeometry( height-500, 128, 128 );
+    var geometry = new THREE.SphereGeometry( height-500, 128, 128 );
     // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 
     var tuniform = {
