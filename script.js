@@ -4,19 +4,27 @@ function run (vertexShader, fragmentShader) {
     var stats = new Stats();
     stats.showPanel( 0 ); // 0: fps, 1: ms, 2: mb, 3+: custom
     document.body.appendChild( stats.dom );
-    // var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, - 500, 1000 );
+    var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
 
+    // camera = new THREE.OrthographicCamera( window.innerWidth / - 2, window.innerWidth / 2, window.innerHeight / 2, window.innerHeight / - 2, - 500, 1000 );
 
-    var renderer = new THREE.WebGLRenderer();
+    camera.position.z = 500;
+
+    var renderer = new THREE.WebGLRenderer( { antialias: true } );
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
 
-    // var geometry = new THREE.BoxGeometry( window.innerWidth, window.innerHeight, 1 );
-    var geometry = new THREE.SphereGeometry( window.innerHeight-500, 32, 32 );
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
+    var geometry = new THREE.BoxGeometry( window.innerWidth, window.innerHeight, 32 );
+
+    // var geometry = new THREE.SphereGeometry( height-500, 128, 128 );
     // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 
     var tuniform = {
+        iWidth: { type: 'f', value: width },
+        iHeight: { type: 'f', value: height },
         iGlobalTime:    { type: 'f', value: 0.1 },
         iChannel0:  { type: 't', value: THREE.ImageUtils.loadTexture( 'stars-2.jpg') },
         iChannel1:  { type: 't', value: THREE.ImageUtils.loadTexture( 'stars-1.jpg' ) },
@@ -39,8 +47,8 @@ function run (vertexShader, fragmentShader) {
 
     function render() {
         stats.begin();
-        mesh.rotation.x += 0.001;
-        mesh.rotation.y += 0.001;
+        // mesh.rotation.x += 0.001;
+        // mesh.rotation.y += 0.001;
         tuniform.iGlobalTime.value += clock.getDelta();
         renderer.render( scene, camera );
         stats.end();
@@ -72,9 +80,14 @@ function getShader (path, callback) {
 
 getShader('vertexShader.glsl', function (vertexShader) {
     if(vertexShader) {
-        getShader('fragmentShader.glsl', function (fragmentShader) {
-            if(fragmentShader) {
-                run(vertexShader, fragmentShader);
+        getShader('blendmodes.glsl', function (blendModesCode) {
+            if(blendModesCode) {
+                getShader('fragmentShader.glsl', function (fragmentShader) {
+                    fragmentShader = blendModesCode + fragmentShader;
+                    if(fragmentShader) {
+                        run(vertexShader, fragmentShader);
+                    }
+                });
             }
         });
     }
