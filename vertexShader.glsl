@@ -1,22 +1,16 @@
-// varying vec2 vUv;
-varying vec2 texCoord;
+varying vec2 vUv;
+varying vec3 vecPos;
+varying vec3 vecNormal;
 
-void main()
-{
-    // vUv = uv;
-
-    vec4 mvPosition = modelViewMatrix * vec4(position, 1.0 );
-    gl_Position = projectionMatrix * mvPosition;
-
-    texCoord = (vec2( gl_Position.x, gl_Position.y )
-             + vec2( 1.0 ) ) / vec2( 2.0 );
+void main() {
+  vUv = uv;
+  // Since the light is in camera coordinates,
+  // I'll need the vertex position in camera coords too
+  vecPos = (modelViewMatrix * vec4(position, 1.0)).xyz;
+  // That's NOT exacly how you should transform your
+  // normals but this will work fine, since my model
+  // matrix is pretty basic
+  vecNormal = (modelViewMatrix * vec4(normal, 0.0)).xyz;
+  gl_Position = projectionMatrix *
+                vec4(vecPos, 1.0);
 }
-
-// void main(void)
-// {
-//    gl_Position = vec4( gl_Vertex.xy, 0.0, 1.0 );
-//    gl_Position = sign( gl_Position );
-
-//    texCoord = (vec2( gl_Position.x, gl_Position.y )
-//              + vec2( 1.0 ) ) / vec2( 2.0 );
-// }

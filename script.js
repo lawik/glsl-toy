@@ -27,6 +27,7 @@ function run (vertexShader, fragmentShader) {
         iHeight: { type: 'f', value: height },
         iGlobalTime:    { type: 'f', value: 0.1 },
         iChannel0:  { type: 't', value: THREE.ImageUtils.loadTexture( 'stars-2.jpg') },
+        // iChannel0:  { type: 't', value: THREE.ImageUtils.loadTexture( 'wood-1.jpg') }
         iChannel1:  { type: 't', value: THREE.ImageUtils.loadTexture( 'stars-1.jpg' ) },
     };
     tuniform.iChannel0.value.wrapS = tuniform.iChannel0.value.wrapT = THREE.RepeatWrapping;
@@ -40,6 +41,8 @@ function run (vertexShader, fragmentShader) {
         fragmentShader: fragmentShader
 
     } );
+    material.transparent = true;
+    material.blending = THREE.NormalBlending;
     var mesh = new THREE.Mesh( geometry, material );
     scene.add( mesh );
 
@@ -47,8 +50,8 @@ function run (vertexShader, fragmentShader) {
 
     function render() {
         stats.begin();
-        // mesh.rotation.x += 0.001;
-        // mesh.rotation.y += 0.001;
+        // mesh.rotation.x += 0.01;
+        // mesh.rotation.y += 0.01;
         tuniform.iGlobalTime.value += clock.getDelta();
         renderer.render( scene, camera );
         stats.end();
@@ -82,10 +85,14 @@ getShader('vertexShader.glsl', function (vertexShader) {
     if(vertexShader) {
         getShader('blendmodes.glsl', function (blendModesCode) {
             if(blendModesCode) {
-                getShader('fragmentShader.glsl', function (fragmentShader) {
-                    fragmentShader = blendModesCode + fragmentShader;
-                    if(fragmentShader) {
-                        run(vertexShader, fragmentShader);
+                getShader('tools.glsl', function (toolsCode) {
+                    if(toolsCode) {
+                        getShader('fragmentShader.glsl', function (fragmentShader) {
+                            fragmentShader = toolsCode + blendModesCode + fragmentShader;
+                            if(fragmentShader) {
+                                run(vertexShader, fragmentShader);
+                            }
+                        });
                     }
                 });
             }
