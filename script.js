@@ -18,8 +18,12 @@ function run (vertexShader, fragmentShader) {
     var height = window.innerHeight;
 
     // var geometry = new THREE.BoxGeometry( window.innerWidth, window.innerHeight, 32 );
+    var size = width/2;
+    if(height < width) {
+        size = height/2;
+    }
+    var geometry = new THREE.SphereGeometry(size , 128, 128 );
 
-    var geometry = new THREE.SphereGeometry( height-500, 128, 128 );
     // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 
     var tuniform = {
@@ -50,8 +54,8 @@ function run (vertexShader, fragmentShader) {
 
     function render() {
         stats.begin();
-        // mesh.rotation.x += 0.01;
-        // mesh.rotation.y += 0.01;
+        mesh.rotation.x += 0.01;
+        mesh.rotation.y += 0.01;
         tuniform.iGlobalTime.value += clock.getDelta();
         renderer.render( scene, camera );
         stats.end();

@@ -11,6 +11,5 @@ void main() {
   // normals but this will work fine, since my model
   // matrix is pretty basic
   vecNormal = (modelViewMatrix * vec4(normal, 0.0)).xyz;
-  gl_Position = projectionMatrix *
-                vec4(vecPos, 1.0);
+  gl_Position = projectionMatrix * vec4(vecPos, 1.0);
 }
