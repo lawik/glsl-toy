@@ -14,15 +14,18 @@ function run (vertexShader, fragmentShader) {
     renderer.setSize( window.innerWidth, window.innerHeight );
     document.body.appendChild( renderer.domElement );
 
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
+
     var width = window.innerWidth;
     var height = window.innerHeight;
 
+    var geometry = new THREE.BoxGeometry( 1024, 1024, 32, 256, 256 );
     // var geometry = new THREE.BoxGeometry( window.innerWidth, window.innerHeight, 32 );
     var size = width/2;
     if(height < width) {
         size = height/2;
     }
-    var geometry = new THREE.SphereGeometry(size , 128, 128 );
+    // var geometry = new THREE.SphereGeometry(size , 128, 128 );
 
     // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 
@@ -33,6 +36,7 @@ function run (vertexShader, fragmentShader) {
         iChannel0:  { type: 't', value: THREE.ImageUtils.loadTexture( 'stars-2.jpg') },
         // iChannel0:  { type: 't', value: THREE.ImageUtils.loadTexture( 'wood-1.jpg') }
         iChannel1:  { type: 't', value: THREE.ImageUtils.loadTexture( 'stars-1.jpg' ) },
+        iChannel2: { type: 't', value: THREE.ImageUtils.loadTexture('checkerboard.gif')}
     };
     tuniform.iChannel0.value.wrapS = tuniform.iChannel0.value.wrapT = THREE.RepeatWrapping;
     tuniform.iChannel1.value.wrapS = tuniform.iChannel1.value.wrapT = THREE.RepeatWrapping;
@@ -52,10 +56,22 @@ function run (vertexShader, fragmentShader) {
 
     // camera.position.z = 5;
 
+    mesh.rotation.x = 0;
+    window.mesh = mesh;
+    mesh.position.z = 200
+
+    window.meh = function () {
+        if(window.mesh.rotation.x != 5) {
+            window.mesh.rotation.x = 5
+        } else {
+            window.mesh.rotation.x = 0;
+        }
+    };
+
     function render() {
         stats.begin();
-        mesh.rotation.x += 0.01;
-        mesh.rotation.y += 0.01;
+        // mesh.rotation.x += 0.01;
+        // mesh.rotation.y += 0.01;
         tuniform.iGlobalTime.value += clock.getDelta();
         renderer.render( scene, camera );
         stats.end();
@@ -93,6 +109,7 @@ getShader('vertexShader.glsl', function (vertexShader) {
                     if(toolsCode) {
                         getShader('fragmentShader.glsl', function (fragmentShader) {
                             fragmentShader = toolsCode + blendModesCode + fragmentShader;
+                            vertexShader = toolsCode + blendModesCode + vertexShader;
                             if(fragmentShader) {
                                 run(vertexShader, fragmentShader);
                             }
