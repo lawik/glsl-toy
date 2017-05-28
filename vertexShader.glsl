@@ -5,7 +5,7 @@ varying vec3 vecPos;
 varying vec3 vecNormal;
 
 void main() {
-  float maxHeight = 10.0;
+  float maxHeight = 32.0;
   vUv = uv;
   // Since the light is in camera coordinates,
   // I'll need the vertex position in camera coords too
@@ -17,14 +17,14 @@ void main() {
 
   float intensity_1 = snoise(
     vec2(
-        (vecPos.x/128.0)+(iGlobalTime/4.0),
-        (vecPos.y/128.0)
+        (position.x/512.0)+(iGlobalTime/4.0),
+        (position.y/512.0)
     )
   );
   float intensity_2 = snoise(
     vec2(
-        (vecPos.x/64.0)+(iGlobalTime/8.0),
-        (vecPos.y/64.0)+(sin(iGlobalTime/4.0))
+        (position.x/256.0)+(iGlobalTime/8.0),
+        (position.y/256.0)+(sin(iGlobalTime/4.0))
     )
   );
 
