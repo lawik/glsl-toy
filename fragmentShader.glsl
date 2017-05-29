@@ -1,6 +1,8 @@
 uniform float iGlobalTime;
 uniform float iWidth;
 uniform float iHeight;
+
+uniform sampler2D iChannel0;
 uniform sampler2D iChannel2;
 
 varying vec2 vUv;
@@ -8,7 +10,28 @@ varying vec3 vecPos;
 
 void main(void) {
 
-  gl_FragColor = texture2D(iChannel2, vUv);
+  // gl_FragColor = texture2D(iChannel2, vUv);
+  vec4 textureColor_1 = texture2D(iChannel0,
+    vec2(
+      vUv.x - iGlobalTime/100.0,
+      vUv.y - cos(iGlobalTime/100.0)
+    )*4.0
+  );
+  //-vUv*4.0
+  vec4 textureColor_2 = texture2D(iChannel0,
+    vec2(
+      vUv.x + iGlobalTime/100.0,
+      vUv.y + sin(iGlobalTime/100.0)
+    )*4.0
+  );
+
+  gl_FragColor = vec4(
+    blendOverlay(
+      textureColor_1.rgb,
+      textureColor_2.rgb
+    ).rgb,
+    1.0
+  );
 
   // vec4 textureColor2 = texture2D(iChannel2, vec2(vUv.x+iGlobalTime/10.0, vUv.y+iGlobalTime/5.0));
   // vec3 blended = blendMultiply(textureColor.rgb, textureColor2.rgb);

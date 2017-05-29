@@ -29,6 +29,7 @@ function run (vertexShader, fragmentShader) {
 
     // var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 
+
     var tuniform = {
         iWidth: { type: 'f', value: width },
         iHeight: { type: 'f', value: height },
@@ -36,7 +37,9 @@ function run (vertexShader, fragmentShader) {
         iChannel0:  { type: 't', value: THREE.ImageUtils.loadTexture( 'stars-2.jpg') },
         // iChannel0:  { type: 't', value: THREE.ImageUtils.loadTexture( 'wood-1.jpg') }
         iChannel1:  { type: 't', value: THREE.ImageUtils.loadTexture( 'stars-1.jpg' ) },
-        iChannel2: { type: 't', value: THREE.ImageUtils.loadTexture('checkerboard.gif')}
+        iChannel2: { type: 't', value: THREE.ImageUtils.loadTexture('checkerboard.png')},
+
+        light: true
     };
     tuniform.iChannel0.value.wrapS = tuniform.iChannel0.value.wrapT = THREE.RepeatWrapping;
     tuniform.iChannel1.value.wrapS = tuniform.iChannel1.value.wrapT = THREE.RepeatWrapping;
@@ -53,6 +56,10 @@ function run (vertexShader, fragmentShader) {
     material.blending = THREE.NormalBlending;
     var mesh = new THREE.Mesh( geometry, material );
     scene.add( mesh );
+
+    var light = new THREE.PointLight( 0x00ff00, 1, 100 );
+    light.position.set( 50, 50, 50 );
+    scene.add( light );
 
     // camera.position.z = 5;
 
